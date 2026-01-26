@@ -74,11 +74,15 @@
     {"name": "Screen shot", "title": "Screenshot in macOS", "shortName": "SShot"},
     {"name": "Cortana", "title": "Cortana in Windows", "shortName": "Cortana"},
     {"name": "Siri", "title": "Siri in macOS", "shortName": "Siri"},
+
     {"name": "Bluetooth Host 1", "title": "Bluetooth Host 1", "shortName": "BTH1"},
     {"name": "Bluetooth Host 2", "title": "Bluetooth Host 2", "shortName": "BTH2"},
     {"name": "Bluetooth Host 3", "title": "Bluetooth Host 3", "shortName": "BTH3"},
     {"name": "Battery Level", "title": "Show battery level", "shortName": "Batt"},
-    {"name": "Dump Key Stats", "title": "Show Key Press Stats", "shortName": "DumpK"}
+
+    {"name": "Dump Key Stats", "title": "Show Key Press Stats", "shortName": "DumpK"},
+    {"name": "Lock Keyboard", "title": "Lock Keyboard", "shortName": "LockK"},
+    {"name": "Lock Win", "title": "Lock Win", "shortName": "LockWinK"}
   ],
   "matrix": {"rows": 5, "cols": 15},
   "layouts": {

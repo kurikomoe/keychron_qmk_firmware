@@ -29,6 +29,7 @@
 typedef struct {
     uint16_t magic;                   // 2 Bytes
     uint16_t version;                 // 2 bytes
+    uint16_t writes;                  // 2 Bytes 继续写入次数
     uint32_t counts[MAX_LOG_KEY + 1]; // 484 Bytes
 } logger_store_t;
 
@@ -51,6 +52,7 @@ void logger_init(void) {
         uprintf("Logger: First run or version mismatch, initializing EEPROM...\n");
         log_store.magic = LOGGER_MAGIC;
         log_store.version = VERSION;
+        log_store.writes = 0;
         memset(log_store.counts, 0, sizeof(log_store.counts));
         // 立即写入初始化状态
         eeprom_update_block(&log_store, (void*)EEPROM_LOGGER_OFFSET, sizeof(logger_store_t));
@@ -77,6 +79,7 @@ void log_key_press(uint16_t keycode) {
 void logger_save_now(void) {
     if (is_dirty) {
         uprintf("Logger: Saving %lu keys to EEPROM.\n", unsaved_count);
+        log_store.writes++;
         eeprom_update_block(&log_store, (void*)EEPROM_LOGGER_OFFSET, sizeof(logger_store_t));
         is_dirty = false;
         unsaved_count = 0;
@@ -106,12 +109,57 @@ void logger_task(void) {
 
 void logger_dump_all(void) {
     uprintf("\n--- KEY LOGGER REPORT ---\n");
-    uprintf("Magic: 0x%x, Ver: %u\n", log_store.magic, log_store.version);
+    uprintf("Magic: 0x%x, Ver: %u, Writes: %u\n",
+        log_store.magic, log_store.version, log_store.writes);
+    uint32_t total_keys = 0;
     for (int i = 0; i <= MAX_LOG_KEY; i++) {
         if (log_store.counts[i] > 0) {
-            uprintf("%d, %lu\n", i, log_store.counts[i]);
+            print_key_name(i);
+            uprintf(", %lu\n", log_store.counts[i]);
+            total_keys += log_store.counts[i];
         }
     }
+    uprintf("Total Key Presses Logged: %lu\n", total_keys);
+    uprintf("--- END REPORT ---\n");
+}
+
+typedef struct {
+    uint8_t keycode;
+    uint32_t count;
+} key_sort_entry_t;
+
+int compare_entries(const void *a, const void *b) {
+    key_sort_entry_t *entry_a = (key_sort_entry_t *)a;
+    key_sort_entry_t *entry_b = (key_sort_entry_t *)b;
+
+    if (entry_a->count < entry_b->count) return -1;
+    if (entry_a->count > entry_b->count) return 1;
+    return 0;
+}
+
+void logger_dump_sorted(void) {
+    static key_sort_entry_t entries[MAX_LOG_KEY + 1];
+    int valid_count = 0;
+    uint32_t total_keys = 0;
+    for (int i = 0; i <= MAX_LOG_KEY; i++) {
+        if (log_store.counts[i] > 0) {
+            entries[valid_count].keycode = i;
+            entries[valid_count].count = log_store.counts[i];
+            total_keys += log_store.counts[i];
+            valid_count++;
+        }
+    }
+    qsort(entries, valid_count, sizeof(key_sort_entry_t), compare_entries);
+    uprintf("\n--- KEY LOGGER REPORT (SORTED ASC) ---\n");
+    uprintf("Magic: 0x%x, Ver: %u, Writes: %u\n",
+        log_store.magic, log_store.version, log_store.writes);
+    uprintf("Key, Count\n");
+    for (int i = 0; i < valid_count; i++) {
+        print_key_name(entries[i].keycode);
+        uprintf(", %lu\n", entries[i].count);
+    }
+
+    uprintf("Total: %lu\n", total_keys);
     uprintf("--- END REPORT ---\n");
 }
 

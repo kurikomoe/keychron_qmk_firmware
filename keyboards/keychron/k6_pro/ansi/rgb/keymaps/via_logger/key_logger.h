@@ -13,5 +13,6 @@ void logger_task(void);
 void logger_save_now(void);
 // 打印所有统计数据到控制台
 void logger_dump_all(void);
+void logger_dump_sorted(void);
 // VIA 协议处理函数
 void logger_via_handler(uint8_t *data, uint8_t length);

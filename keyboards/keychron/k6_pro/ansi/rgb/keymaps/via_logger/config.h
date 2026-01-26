@@ -1,6 +1,24 @@
 #pragma once
 // #pragma message("Applying custom mousekey configuration for VIA Logger keymap")
 
+// 1. 默认模式：纯色常亮
+#undef RGB_MATRIX_DEFAULT_MODE
+#define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_SOLID_COLOR
+// 2. 默认颜色：白色
+// Hue (色相): 0 (白色不看色相)
+// Sat (饱和度): 0 (0 就是纯白/无色，255 是最艳)
+#undef RGB_MATRIX_DEFAULT_HUE
+#define RGB_MATRIX_DEFAULT_HUE 0
+#undef RGB_MATRIX_DEFAULT_SAT
+#define RGB_MATRIX_DEFAULT_SAT 0
+// 3. 默认亮度：50%
+// 范围 0-255，50% 约为 128
+#undef RGB_MATRIX_DEFAULT_VAL
+#define RGB_MATRIX_DEFAULT_VAL 128
+// 4. 默认速度 (保持中等即可)
+#undef RGB_MATRIX_DEFAULT_SPD
+#define RGB_MATRIX_DEFAULT_SPD 128
+
 // --- 鼠标键手感调优 (4K/2.5K 优化版) ---
 
 // 1. 极速响应
@@ -38,7 +56,7 @@
 // 意思是：按住按键超过 200ms，就被认为是“按住”；否则认为是“点击”。
 // 如果您打字很快，觉得按住 Fn 键反应太慢，可以减小到 175 或 150。
 #undef TAPPING_TERM
-#define TAPPING_TERM 200
+#define TAPPING_TERM 150
 
 // 激进保持 (Permissive Hold)
 // 如果您开启了这个，当您按下 "Mod-Tap键" + "其他键" 时，
