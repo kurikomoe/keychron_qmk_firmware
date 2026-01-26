@@ -156,11 +156,11 @@
         "pre-commit-hooks": "pre-commit-hooks"
       },
       "locked": {
-        "lastModified": 1769125157,
-        "narHash": "sha256-2fesXyoPmxOcn0jkHW1kuwEaUJ2KHJlmTN6Br06LMiw=",
+        "lastModified": 1769262116,
+        "narHash": "sha256-mVDtqLCuKXuZIOZeoqpMR8zMNWhj7YWpnorHJOP8TQA=",
         "owner": "kurikomoe",
         "repo": "nur-packages",
-        "rev": "0613eab54030e117ff6cf2d62a1ea7aaabaef6f3",
+        "rev": "e5336042501a7a8f67d00a45220e1b08c7f7869c",
         "type": "github"
       },
       "original": {

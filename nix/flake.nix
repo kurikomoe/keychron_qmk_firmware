@@ -72,6 +72,8 @@
                 openssl.dev
                 stdenv.cc.cc.lib
 
+                pkgs-kuriko-nur.devshell-cache-tools
+
                 qmk
                 dfu-util
                 dfu-programmer
@@ -103,6 +105,8 @@
 
               # Enter FHS env
               # $\{packages.fhs}/bin/fhs-devenv
+
+              hello
             '';
 
             env = rec {

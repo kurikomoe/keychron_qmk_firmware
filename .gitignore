@@ -1,3 +1,6 @@
+.direnv/
+.pre-commit-config.yaml
+
 # Junk files
 *.bak
 *.swp
