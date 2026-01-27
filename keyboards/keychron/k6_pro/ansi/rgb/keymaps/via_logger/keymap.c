@@ -1,3 +1,5 @@
+#pragma GCC push_options
+#pragma GCC optimize ("O3")
 /* Copyright 2021 @ Keychron (https://www.keychron.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,32 +21,14 @@
 #include "via.h"
 #include "mousekey.h"
 
+#include "key_defs.h"
+
 #include "cmds.h"
+#include "combo.h"
 #include "key_logger.h"
 
 static bool is_keyboard_locked = false;
 static bool is_win_locked = false;
-
-// 定义自定义键值
-enum custom_keycodes {
-    KEY_LOG_DUMP = NEW_SAFE_RANGE, // 从安全范围开始定义
-    KEY_LOCK_KB,
-    KEY_LOCK_WIN,
-    KEY_MS_SPD,
-};
-
-// clang-format off
-enum layers{
-  MAC_BASE,
-  WIN_BASE,
-  MAC_FN1,
-  WIN_FN1,
-  FN2
-};
-
-// We treat KC_F24 as the lead_key since LT use 0xFF&KC.
-// #define KC_RFN LT(FN2, KC_A)
-#define KC_RFN MO(FN2)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [MAC_BASE] = LAYOUT_ansi_68(
@@ -59,7 +43,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_TAB,      KC_Q,       KC_W,       KC_E,        KC_R,          KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS, KC_PGUP,
      KC_LCTL,     KC_A,       KC_S,       KC_D,        KC_F,          KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,            KC_ENT,  KC_PGDN,
      KC_LSFT,     KC_Z,       KC_X,       KC_C,        KC_V,          KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,             KC_UP,  KC_DEL,
-     MO(WIN_FN1), KC_LALT,    KC_LGUI,                                        KC_SPC,                         KC_RFN,   KC_RALT,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
+     MO(WIN_FN1), KC_LALT,    KC_LGUI,                                        KC_SPC,                         KC_RFN,  KC_RALT,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
 
 // left Fn
 [MAC_FN1] = LAYOUT_ansi_68(
@@ -75,7 +59,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_TRNS,     KC_TRNS,    KC_MS_UP,   KEY_MS_SPD,     KC_CAPS,       KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_INS,   KC_TRNS,  KC_PSCR,  KC_BRIU,  KC_BRID, KC_TRNS, KEY_LOG_DUMP,
      KC_LNG1,     KC_MS_LEFT, KC_MS_DOWN, KC_MS_RIGHT, KC_MS_WH_DOWN, KC_TRNS,  KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_HOME,  KC_END,      KC_TRNS,          KC_TRNS,
      KC_LNG2,     KC_MS_BTN1, KC_MS_BTN3, KC_MS_BTN2,  KC_MS_WH_UP,   BAT_LVL,  KC_TRNS,  KC_MUTE,  KC_VOLD,  KC_VOLU,  KC_TRNS,  KC_HOME,              RGB_VAI, QK_BOOTLOADER,
-     KC_TRNS,     KC_TRNS,    KEY_LOCK_WIN,                           KC_TRNS,                                KEY_LOCK_KB,KC_TRNS,KC_APP,  RGB_MOD,    RGB_VAD, RGB_RMOD),
+     KC_TRNS,     KC_TRNS,    KC_TRNS,                           KC_TRNS,                                     KC_TRNS,  KC_TRNS,KC_APP,  RGB_MOD,    RGB_VAD, RGB_RMOD),
 
 // Right Fn
 [FN2] = LAYOUT_ansi_68(
@@ -83,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_TRNS,     KC_GRV,     KC_MS_UP,   KEY_MS_SPD,  KC_CAPS,       KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_INS,   KC_TRNS,  KC_PSCR,  KC_BRIU,  KC_TRNS,  KC_TRNS,  KC_TRNS,
      KC_LNG1,     KC_MS_LEFT, KC_MS_DOWN, KC_MS_RIGHT, KC_MS_WH_DOWN, KC_TRNS,  KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_HOME,  KC_END,         KC_TRNS,      KC_TRNS,
      KC_LNG2,     KC_MS_BTN1, KC_MS_BTN3, KC_MS_BTN2,  KC_MS_WH_UP,   BAT_LVL,  KC_TRNS,  KC_MUTE,  KC_VOLD,  KC_VOLU,  KC_TRNS,  KC_HOME,            KC_TRNS,  KC_END,
-     KEY_LOCK_KB, KC_TRNS,    KC_TRNS,                                KC_TRNS,                                KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS),
+     KC_TRNS,     KC_TRNS,    KC_TRNS,                                KC_TRNS,                                KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS),
 };
 
 // 1. 初始化
@@ -91,6 +75,7 @@ void keyboard_post_init_user(void) {
     logger_init();
 }
 
+#ifdef LEADER_ENABLE
 void leader_end_user(void) {
     if (leader_sequence_four_keys(KC_T, KC_E, KC_S, KC_T)) {
         cmd_test();
@@ -99,9 +84,13 @@ void leader_end_user(void) {
         safe_linux_reboot();
     }
 }
+#endif
 
 // 2. 记录按键
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    // ============================================================
+    // 1. 键盘锁定逻辑 (Keyboard Lock)
+    // ============================================================
     if (is_keyboard_locked) {
         if (keycode == KEY_LOCK_KB) {
             if (record->event.pressed) {
@@ -115,23 +104,49 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             case MO(WIN_FN1):
             case MO(FN2):
                 return true;
+            case KEY_FN_CUSTOM: {
+                if (record->event.pressed) {
+                    layer_on(FN2);
+                } else {
+                    layer_off(FN2);
+                }
+                return false;
+            }
         }
         if (record->event.pressed) {
             return false;
         }
     }
 
+    // ============================================================
+    // 2. Win 键锁定逻辑
+    // ============================================================
     if (is_win_locked && (keycode == KC_LWIN || keycode == KC_RWIN)) {
         return false; // 拦截Win键
     }
 
+    // ============================================================
+    // 3. 自定义 Fn 键逻辑
+    //  让 combo 先触发，再后续触发 Fn 逻辑
+    // ============================================================
+    if (keycode == KEY_FN_CUSTOM) {
+        if (record->event.pressed) {
+            layer_on(FN2); // 按下：开启 FN2 层
+        } else {
+            layer_off(FN2); // 松开：关闭 FN2 层
+        }
+        return false; // 拦截，不让它发给电脑
+    }
+
     if (record->event.pressed) {
         switch (keycode) {
+#ifdef LEADER_ENABLE
             case KC_F24: {
                 uprintf("lead start\n");
                 leader_start();
                 return false;
             }
+#endif
             case KEY_LOCK_KB: {
                 is_keyboard_locked = true;
                 return false;
@@ -144,9 +159,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 static uint8_t speed_stage = 0;
                 speed_stage = (speed_stage + 1) % 3;
 
-                if (speed_stage == 0) mk_max_speed = 16;     // 慢 (默认)
+                if (speed_stage == 0) mk_max_speed = 16;     // 快 (4K屏)
                 else if (speed_stage == 1) mk_max_speed = 8; // 中 (2K屏)
-                else mk_max_speed = 4;                       // 快 (4K屏)
+                else mk_max_speed = 4;                       // 慢 (默认)
                 uprintf("Mouse Key Speed set to %u\n", mk_max_speed);
                 return false;
             }

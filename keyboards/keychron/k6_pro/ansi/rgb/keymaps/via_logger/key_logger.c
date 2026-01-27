@@ -1,3 +1,5 @@
+#pragma GCC push_options
+#pragma GCC optimize ("O3")
 #include <string.h> // for memset
 
 #include "quantum.h"

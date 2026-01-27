@@ -1,3 +1,5 @@
+#pragma GCC push_options
+#pragma GCC optimize ("O3")
 #include "quantum.h"
 #include "key_logger_shared.h"
 
