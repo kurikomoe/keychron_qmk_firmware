@@ -88,9 +88,11 @@
 // 默认 50ms。意思是您必须在 50ms 内同时按下两个键。
 // 如果您经常按不出组合键，可以把这个值改大一点 (例如 60 或 80)。
 #undef COMBO_TERM
-#define COMBO_TERM 50
+#define COMBO_TERM 60
 
 #define COMBO_ONLY_FROM_LAYER 0
+
+#define COMBO_PROCESS_KEY_RELEASE
 
 
 // Hardware specific

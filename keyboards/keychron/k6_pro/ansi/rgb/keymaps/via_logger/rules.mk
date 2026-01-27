@@ -8,4 +8,5 @@ COMBO_ENABLE = yes
 LTO_ENABLE = yes
 
 SRC += key_logger.c \
-	   key_logger_shared.c
+	   key_logger_shared.c \
+	   combo.c

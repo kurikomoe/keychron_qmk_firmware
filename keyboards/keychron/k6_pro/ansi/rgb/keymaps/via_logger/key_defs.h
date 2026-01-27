@@ -1,4 +1,5 @@
 #pragma once
+#include "quantum.h"
 
 // 定义自定义键值
 enum custom_keycodes {
