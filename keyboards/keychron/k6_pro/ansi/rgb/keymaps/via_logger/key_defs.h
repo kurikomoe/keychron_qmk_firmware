@@ -19,4 +19,5 @@ enum layers{
   FN2
 };
 
-#define KC_RFN KEY_FN_CUSTOM
+// #define KC_RFN KEY_FN_CUSTOM
+#define KC_RFN MO(FN2)
