@@ -3,8 +3,9 @@
 #include <string.h> // for memset
 
 #include "quantum.h"
-#include "eeprom.h"
 #include "via.h"
+
+#include "storage.h"
 
 #include "key_logger.h"
 #include "key_logger_shared.h"
@@ -25,19 +26,10 @@
 #define IDLE_TIMEOUT 300000
 
 
-// --- 数据结构 ---
-// 总大小 = 2(magic) + 2(version) + 484(counts) = 488 字节
-// 1536 + 488 = 2024 < 2048 (安全)
-typedef struct {
-    uint16_t magic;                   // 2 Bytes
-    uint16_t version;                 // 2 bytes
-    uint16_t writes;                  // 2 Bytes 继续写入次数
-    uint32_t counts[MAX_LOG_KEY + 1]; // 484 Bytes
-} logger_store_t;
 
 
 // RAM 缓冲区
-static logger_store_t log_store;
+#define log_store (storage.logger_data)
 
 static bool is_dirty = false;
 static uint32_t unsaved_count = 0;
@@ -46,9 +38,6 @@ static uint32_t last_keypress_time = 0;
 
 // --- 实现 ---
 void logger_init(void) {
-    // 1. 从 EEPROM 读取数据到 RAM
-    eeprom_read_block(&log_store, (void*)EEPROM_LOGGER_OFFSET, sizeof(logger_store_t));
-
     // 2. 检查魔数和版本号
     if (log_store.magic != LOGGER_MAGIC || log_store.version != VERSION) {
         uprintf("Logger: First run or version mismatch, initializing EEPROM...\n");
@@ -57,7 +46,7 @@ void logger_init(void) {
         log_store.writes = 0;
         memset(log_store.counts, 0, sizeof(log_store.counts));
         // 立即写入初始化状态
-        eeprom_update_block(&log_store, (void*)EEPROM_LOGGER_OFFSET, sizeof(logger_store_t));
+        save_storage();
     } else {
         uprintf("Logger: Loaded from EEPROM.\n");
     }
@@ -82,7 +71,7 @@ void logger_save_now(void) {
     if (is_dirty) {
         uprintf("Logger: Saving %lu keys to EEPROM.\n", unsaved_count);
         log_store.writes++;
-        eeprom_update_block(&log_store, (void*)EEPROM_LOGGER_OFFSET, sizeof(logger_store_t));
+        save_storage();
         is_dirty = false;
         unsaved_count = 0;
     }

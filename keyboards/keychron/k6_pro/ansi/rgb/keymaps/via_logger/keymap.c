@@ -19,10 +19,13 @@
 #include QMK_KEYBOARD_H
 
 #include "quantum.h"
+#include "eeprom.h"
 #include "via.h"
 #include "mousekey.h"
 
 #include "key_defs.h"
+
+#include "storage.h"
 
 #include "cmds.h"
 #include "combo.h"
@@ -30,6 +33,9 @@
 
 static bool is_keyboard_locked = false;
 static bool is_win_locked = false;
+#define is_swap_ralt_rfn (storage.is_swap_ralt_rfn)
+
+#define K_SWAP1 KEY_SWAP_RALT_RFN
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [MAC_BASE] = LAYOUT_ansi_68(
@@ -44,7 +50,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_TAB,      KC_Q,       KC_W,       KC_E,        KC_R,          KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS, KC_PGUP,
      KC_LCTL,     KC_A,       KC_S,       KC_D,        KC_F,          KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,            KC_ENT,  KC_PGDN,
      KC_LSFT,     KC_Z,       KC_X,       KC_C,        KC_V,          KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,             KC_UP,  KC_DEL,
-     MO(WIN_FN1), KC_LALT,    KC_LGUI,                                        KC_SPC,                         KC_RFN,  KC_RALT,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
+     MO(WIN_FN1), KC_LGUI,    KC_LALT,                                        KC_SPC,                         KC_RFN,  KC_RALT,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
+
+[WIN_BASE_SWAP] = LAYOUT_ansi_68(
+     KC_ESC,      KC_1,       KC_2,       KC_3,        KC_4,          KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,  KC_EQL,   KC_BSPC, RGB_TOG,
+     KC_TAB,      KC_Q,       KC_W,       KC_E,        KC_R,          KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS, KC_PGUP,
+     KC_LCTL,     KC_A,       KC_S,       KC_D,        KC_F,          KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,            KC_ENT,  KC_PGDN,
+     KC_LSFT,     KC_Z,       KC_X,       KC_C,        KC_V,          KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,             KC_UP,  KC_DEL,
+     MO(WIN_FN1), KC_LGUI,    KC_LALT,                                        KC_SPC,                         KC_RALT,  KC_RFN,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
 
 // left Fn
 [MAC_FN1] = LAYOUT_ansi_68(
@@ -60,7 +73,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_TRNS,     KC_TRNS,    KC_MS_UP,   KEY_MS_SPD,     KC_CAPS,       KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_INS,   KC_TRNS,  KC_PSCR,  KC_BRIU,  KC_BRID, KC_TRNS, KEY_LOG_DUMP,
      KC_LNG1,     KC_MS_LEFT, KC_MS_DOWN, KC_MS_RIGHT, KC_MS_WH_DOWN, KC_TRNS,  KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_HOME,  KC_END,      KC_TRNS,          KC_TRNS,
      KC_LNG2,     KC_MS_BTN1, KC_MS_BTN3, KC_MS_BTN2,  KC_MS_WH_UP,   BAT_LVL,  KC_TRNS,  KC_MUTE,  KC_VOLD,  KC_VOLU,  KC_TRNS,  KC_HOME,              RGB_VAI, QK_BOOTLOADER,
-     KC_TRNS,     KC_TRNS,    KC_TRNS,                           KC_TRNS,                                     KC_TRNS,  KC_TRNS,KC_APP,  RGB_MOD,    RGB_VAD, RGB_RMOD),
+     KC_TRNS,     KC_TRNS,    KC_TRNS,                           KC_TRNS,                                     KC_TRNS,  K_SWAP1,  KC_APP,  RGB_MOD,    RGB_VAD, RGB_RMOD),
 
 // Right Fn
 [FN2] = LAYOUT_ansi_68(
@@ -71,9 +84,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_TRNS,     KC_TRNS,    KC_TRNS,                                KC_TRNS,                                KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS),
 };
 
+void toggle_rfn_ralt_layer(void) {
+    layer_off(WIN_BASE);
+    layer_off(WIN_BASE_SWAP);
+    if (is_swap_ralt_rfn) {
+        layer_on(WIN_BASE_SWAP);
+    } else {
+        layer_on(WIN_BASE);
+    }
+}
+
 // 1. 初始化
 void keyboard_post_init_user(void) {
+    load_storage();
     logger_init();
+    toggle_rfn_ralt_layer();
 }
 
 #ifdef LEADER_ENABLE
@@ -87,7 +112,6 @@ void leader_end_user(void) {
 }
 #endif
 
-// 2. 记录按键
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // ============================================================
     // 1. 键盘锁定逻辑 (Keyboard Lock)
@@ -139,6 +163,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false; // 拦截，不让它发给电脑
     }
 
+    // uprintf("keycode: 0x%04X %s\n", keycode, record->event.pressed ? "pressed" : "released");
     if (record->event.pressed) {
         switch (keycode) {
 #ifdef LEADER_ENABLE
@@ -169,6 +194,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             case KEY_LOG_DUMP: {
                 // logger_dump_all(); // 导出数据
                 logger_dump_sorted(); // 导出排序后的数据
+                return false;
+            }
+            case K_SWAP1: {
+                is_swap_ralt_rfn = !is_swap_ralt_rfn;
+                save_storage();
+                uprintf("swap alt and rfn: %s\n", is_swap_ralt_rfn ? "ON" : "OFF");
+                toggle_rfn_ralt_layer();
                 return false;
             }
             default: {

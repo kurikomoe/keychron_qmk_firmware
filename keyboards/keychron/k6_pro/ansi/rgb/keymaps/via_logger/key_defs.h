@@ -7,6 +7,7 @@ enum custom_keycodes {
     KEY_LOCK_KB,
     KEY_LOCK_WIN,
     KEY_MS_SPD,
+    KEY_SWAP_RALT_RFN,
     KEY_FN_CUSTOM,
 };
 
@@ -14,6 +15,7 @@ enum custom_keycodes {
 enum layers{
   MAC_BASE,
   WIN_BASE,
+  WIN_BASE_SWAP,
   MAC_FN1,
   WIN_FN1,
   FN2

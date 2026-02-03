@@ -1,5 +1,5 @@
 # VIA_ENABLE = yes
-OPT_DEFS += -DDYNAMIC_KEYMAP_LAYER_COUNT=5
+OPT_DEFS += -DDYNAMIC_KEYMAP_LAYER_COUNT=6
 
 DEBOUNCE_TYPE = asym_eager_defer_pk
 
@@ -9,4 +9,5 @@ LTO_ENABLE = yes
 
 SRC += key_logger.c \
 	   key_logger_shared.c \
+	   storage.c \
 	   combo.c
