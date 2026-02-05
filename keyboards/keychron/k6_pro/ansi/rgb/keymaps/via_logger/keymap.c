@@ -52,52 +52,75 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_LSFT,     KC_Z,       KC_X,       KC_C,        KC_V,          KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,             KC_UP,  KC_DEL,
      MO(WIN_FN1), KC_LGUI,    KC_LALT,                                        KC_SPC,                         KC_RFN,  KC_RALT,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
 
-[WIN_BASE_SWAP] = LAYOUT_ansi_68(
-     KC_ESC,      KC_1,       KC_2,       KC_3,        KC_4,          KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,  KC_EQL,   KC_BSPC, RGB_TOG,
-     KC_TAB,      KC_Q,       KC_W,       KC_E,        KC_R,          KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS, KC_PGUP,
-     KC_LCTL,     KC_A,       KC_S,       KC_D,        KC_F,          KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,            KC_ENT,  KC_PGDN,
-     KC_LSFT,     KC_Z,       KC_X,       KC_C,        KC_V,          KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,             KC_UP,  KC_DEL,
-     MO(WIN_FN1), KC_LGUI,    KC_LALT,                                        KC_SPC,                         KC_RALT,  KC_RFN,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
-
 // left Fn
 [MAC_FN1] = LAYOUT_ansi_68(
-     KC_GRV,      KC_BRID,    KC_BRIU,    KC_MCTL,     KC_LPAD,       RGB_VAD,  RGB_VAI,  KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,  KC_VOLU,  KC_TRNS,  RGB_TOG,
-     KC_TRNS,     BT_HST1,    BT_HST2,    BT_HST3,     KC_TRNS,       KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,
-     RGB_TOG,     RGB_MOD,    RGB_VAI,    RGB_HUI,     RGB_SAI,       RGB_SPI,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,  KC_TRNS,
-     KC_TRNS,     RGB_RMOD,   RGB_VAD,    RGB_HUD,     RGB_SAD,       RGB_SPD,  NK_TOGG,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,            KC_TRNS,  KC_TRNS,
-     KC_TRNS,     KC_TRNS,    KC_TRNS,                                KC_TRNS,                                KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS),
+     KC_GRV,      KC_F1,      KC_F2,      KC_F3,       KC_F4,         KC_F5,    KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,   KC_F12,     KC_DEL,  KEY_LOCK_KB,
+     KC_TRNS,     KC_TRNS,    KC_MS_UP,   KEY_MS_SPD,     KC_CAPS,       KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_INS,   KC_TRNS,  KC_PSCR,  KC_BRIU,  KC_BRID, KC_TRNS, KEY_LOG_DUMP,
+     KC_LNG1,     KC_MS_LEFT, KC_MS_DOWN, KC_MS_RIGHT, KC_MS_WH_DOWN, KC_TRNS,  KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_HOME,  KC_END,      QK_BOOTLOADER,    KC_TRNS,
+     KC_LNG2,     KC_MS_BTN1, KC_MS_BTN3, KC_MS_BTN2,  KC_MS_WH_UP,   BAT_LVL,  KC_TRNS,  KC_MUTE,  KC_VOLD,  KC_VOLU,  KC_TRNS,  KC_HOME,              RGB_VAI, QK_BOOTLOADER,
+     KC_TRNS,     KC_TRNS,    KC_TRNS,                           KC_TRNS,                                     KC_TRNS,  K_SWAP1,  KC_APP,  RGB_MOD,    RGB_VAD, RGB_RMOD),
 
 // left Fn
 [WIN_FN1] = LAYOUT_ansi_68(
      KC_GRV,      KC_F1,      KC_F2,      KC_F3,       KC_F4,         KC_F5,    KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,   KC_F12,     KC_DEL,  KEY_LOCK_KB,
      KC_TRNS,     KC_TRNS,    KC_MS_UP,   KEY_MS_SPD,     KC_CAPS,       KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_INS,   KC_TRNS,  KC_PSCR,  KC_BRIU,  KC_BRID, KC_TRNS, KEY_LOG_DUMP,
-     KC_LNG1,     KC_MS_LEFT, KC_MS_DOWN, KC_MS_RIGHT, KC_MS_WH_DOWN, KC_TRNS,  KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_HOME,  KC_END,      KC_TRNS,          KC_TRNS,
+     KC_LNG1,     KC_MS_LEFT, KC_MS_DOWN, KC_MS_RIGHT, KC_MS_WH_DOWN, KC_TRNS,  KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_HOME,  KC_END,      QK_BOOTLOADER,    KC_TRNS,
      KC_LNG2,     KC_MS_BTN1, KC_MS_BTN3, KC_MS_BTN2,  KC_MS_WH_UP,   BAT_LVL,  KC_TRNS,  KC_MUTE,  KC_VOLD,  KC_VOLU,  KC_TRNS,  KC_HOME,              RGB_VAI, QK_BOOTLOADER,
      KC_TRNS,     KC_TRNS,    KC_TRNS,                           KC_TRNS,                                     KC_TRNS,  K_SWAP1,  KC_APP,  RGB_MOD,    RGB_VAD, RGB_RMOD),
 
 // Right Fn
 [FN2] = LAYOUT_ansi_68(
      S(KC_GRV),   BT_HST1,    BT_HST2,    BT_HST3,     BAT_LVL,       KC_F5,    KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,   KC_F12,   KC_TRNS,  KEY_LOCK_KB,
-     KC_TRNS,     KC_GRV,     KC_MS_UP,   KEY_MS_SPD,  KC_CAPS,       KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_INS,   KC_TRNS,  KC_PSCR,  KC_BRIU,  KC_TRNS,  KC_TRNS,  KC_TRNS,
+     KC_TRNS,     KC_GRV,     KC_MS_UP,   KEY_MS_SPD,  KC_CAPS,       KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_INS,   KC_TRNS,  KC_PSCR,  KC_BRIU,  KC_TRNS,  KC_TRNS,  KEY_LOG_DUMP,
      KC_LNG1,     KC_MS_LEFT, KC_MS_DOWN, KC_MS_RIGHT, KC_MS_WH_DOWN, KC_TRNS,  KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_HOME,  KC_END,         KC_TRNS,      KC_TRNS,
      KC_LNG2,     KC_MS_BTN1, KC_MS_BTN3, KC_MS_BTN2,  KC_MS_WH_UP,   BAT_LVL,  KC_TRNS,  KC_MUTE,  KC_VOLD,  KC_VOLU,  KC_TRNS,  KC_HOME,            KC_TRNS,  KC_END,
      KC_TRNS,     KC_TRNS,    KC_TRNS,                                KC_TRNS,                                KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS),
+
+[WIN_BASE_SWAP] = LAYOUT_ansi_68(
+     KC_ESC,      KC_1,       KC_2,       KC_3,        KC_4,          KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,  KC_EQL,   KC_BSPC, RGB_TOG,
+     KC_TAB,      KC_Q,       KC_W,       KC_E,        KC_R,          KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS, KC_PGUP,
+     KC_LCTL,     KC_A,       KC_S,       KC_D,        KC_F,          KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,            KC_ENT,  KC_PGDN,
+     KC_LSFT,     KC_Z,       KC_X,       KC_C,        KC_V,          KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,             KC_UP,  KC_DEL,
+     MO(WIN_FN1), KC_LGUI,    KC_LALT,                                        KC_SPC,                         KC_RALT,  KC_RFN,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
 };
 
+// layer_state_t default_layer_state_set_user(layer_state_t state) {
+//     if (get_highest_layer(state) == WIN_BASE) {
+//         if (is_swap_ralt_rfn) {
+//             return (1UL << WIN_BASE_SWAP);
+//         }
+//     }
+//     if (get_highest_layer(state) == WIN_BASE_SWAP) {
+//         if (!is_swap_ralt_rfn) {
+//             return (1UL << WIN_BASE);
+//         }
+//     }
+//     return state;
+// }
+
 void toggle_rfn_ralt_layer(void) {
-    layer_off(WIN_BASE);
-    layer_off(WIN_BASE_SWAP);
-    if (is_swap_ralt_rfn) {
-        layer_on(WIN_BASE_SWAP);
-    } else {
-        layer_on(WIN_BASE);
-    }
+    is_swap_ralt_rfn = !is_swap_ralt_rfn;
+    uprintf("Swap Mode: %s\n", is_swap_ralt_rfn ? "ON" : "OFF");
+    default_layer_set(default_layer_state);
 }
+
+// void toggle_rfn_ralt_layer(void) {
+//     layer_off(MAC_BASE);
+//     layer_off(WIN_BASE_SWAP);
+//     layer_off(WIN_BASE);
+//     layer_off(WIN_BASE_SWAP);
+//     if (is_swap_ralt_rfn) {
+//         layer_on(WIN_BASE_SWAP);
+//     } else {
+//         layer_on(WIN_BASE);
+//     }
+// }
 
 // 1. 初始化
 void keyboard_post_init_user(void) {
     load_storage();
     logger_init();
+    is_swap_ralt_rfn = !is_swap_ralt_rfn;
     toggle_rfn_ralt_layer();
 }
 
@@ -197,9 +220,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             }
             case K_SWAP1: {
-                is_swap_ralt_rfn = !is_swap_ralt_rfn;
                 save_storage();
-                uprintf("swap alt and rfn: %s\n", is_swap_ralt_rfn ? "ON" : "OFF");
                 toggle_rfn_ralt_layer();
                 return false;
             }
