@@ -15,10 +15,10 @@ enum custom_keycodes {
 enum layers{
   MAC_BASE,
   WIN_BASE,
+  WIN_BASE_SWAP,
   MAC_FN1,
   WIN_FN1,
   FN2,
-  WIN_BASE_SWAP,
 };
 
 // #define KC_RFN KEY_FN_CUSTOM
