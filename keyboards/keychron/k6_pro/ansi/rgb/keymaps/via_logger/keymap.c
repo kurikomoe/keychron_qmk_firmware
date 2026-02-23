@@ -28,7 +28,7 @@
 #include "storage.h"
 
 #include "cmds.h"
-#include "combo.h"
+// #include "combo.h"
 #include "key_logger.h"
 
 static bool is_keyboard_locked = false;
@@ -37,34 +37,37 @@ static bool is_win_locked = false;
 
 #define K_SWAP1 KEY_SWAP_RALT_RFN
 
+// #define CUSTOM_SPACE LT(FN2,KC_SPC)
+#define CUSTOM_SPACE KC_SPC
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [MAC_BASE] = LAYOUT_ansi_68(
      KC_ESC,      KC_1,       KC_2,       KC_3,        KC_4,          KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,  KC_EQL,   KC_BSPC, RGB_TOG,
      KC_TAB,      KC_Q,       KC_W,       KC_E,        KC_R,          KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS, KC_PGUP,
      KC_LCTL,     KC_A,       KC_S,       KC_D,        KC_F,          KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,      KC_ENT,        KC_PGDN,
      KC_LSFT,     KC_Z,       KC_X,       KC_C,        KC_V,          KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,          KC_UP,     KC_DEL,
-     MO(MAC_FN1), KC_LOPTN,   KC_LCMMD,                                         KC_SPC,                       KC_RFN,   KC_RALT,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
+     MO(MAC_FN1), KC_LOPTN,   KC_LCMMD,                                         CUSTOM_SPACE,                       KC_RFN,   KC_RALT,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
 
 [WIN_BASE] = LAYOUT_ansi_68(
      KC_ESC,      KC_1,       KC_2,       KC_3,        KC_4,          KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,  KC_EQL,   KC_BSPC, RGB_TOG,
      KC_TAB,      KC_Q,       KC_W,       KC_E,        KC_R,          KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS, KC_PGUP,
      KC_LCTL,     KC_A,       KC_S,       KC_D,        KC_F,          KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,            KC_ENT,  KC_PGDN,
      KC_LSFT,     KC_Z,       KC_X,       KC_C,        KC_V,          KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,             KC_UP,  KC_DEL,
-     MO(WIN_FN1), KC_LGUI,    KC_LALT,                                        KC_SPC,                         KC_RFN,  KC_RALT,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
+     MO(WIN_FN1), KC_LGUI,    KC_LALT,                                          CUSTOM_SPACE,                         KC_RFN,  KC_RALT,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
 
 [MAC_BASE_SWAP] = LAYOUT_ansi_68(
      KC_ESC,      KC_1,       KC_2,       KC_3,        KC_4,          KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,  KC_EQL,   KC_BSPC, RGB_TOG,
      KC_TAB,      KC_Q,       KC_W,       KC_E,        KC_R,          KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS, KC_PGUP,
      KC_LCTL,     KC_A,       KC_S,       KC_D,        KC_F,          KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,      KC_ENT,        KC_PGDN,
      KC_LSFT,     KC_Z,       KC_X,       KC_C,        KC_V,          KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,          KC_UP,     KC_DEL,
-     MO(MAC_FN1), KC_LOPTN,   KC_LCMMD,                                         KC_SPC,                       KC_RALT,  KC_RFN,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
+     MO(MAC_FN1), KC_LOPTN,   KC_LCMMD,                                         CUSTOM_SPACE,                       KC_RALT,  KC_RFN,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
 
 [WIN_BASE_SWAP] = LAYOUT_ansi_68(
      KC_ESC,      KC_1,       KC_2,       KC_3,        KC_4,          KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,  KC_EQL,   KC_BSPC, RGB_TOG,
      KC_TAB,      KC_Q,       KC_W,       KC_E,        KC_R,          KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS, KC_PGUP,
      KC_LCTL,     KC_A,       KC_S,       KC_D,        KC_F,          KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,            KC_ENT,  KC_PGDN,
      KC_LSFT,     KC_Z,       KC_X,       KC_C,        KC_V,          KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_RSFT,             KC_UP,  KC_DEL,
-     MO(WIN_FN1), KC_LGUI,    KC_LALT,                                        KC_SPC,                         KC_RALT,  KC_RFN,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
+     MO(WIN_FN1), KC_LGUI,    KC_LALT,                                          CUSTOM_SPACE,                         KC_RALT,  KC_RFN,  KC_RCTL,  KC_LEFT,  KC_DOWN, KC_RGHT),
 
 // left Fn
 [MAC_FN1] = LAYOUT_ansi_68(
@@ -88,7 +91,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_TRNS,     KC_GRV,     KC_MS_UP,   KEY_MS_SPD,  KC_CAPS,       KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_INS,   KC_TRNS,  KC_PSCR,  KC_BRIU,  KC_TRNS,  KC_TRNS,  KEY_LOG_DUMP,
      KC_LNG1,     KC_MS_LEFT, KC_MS_DOWN, KC_MS_RIGHT, KC_MS_WH_DOWN, KC_TRNS,  KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,  KC_HOME,  KC_END,         KC_TRNS,      KC_TRNS,
      KC_LNG2,     KC_MS_BTN1, KC_MS_BTN3, KC_MS_BTN2,  KC_MS_WH_UP,   BAT_LVL,  KC_TRNS,  KC_MUTE,  KC_VOLD,  KC_VOLU,  KC_TRNS,  KC_HOME,            KC_TRNS,  KC_END,
-     KC_TRNS,     KC_TRNS,    KC_TRNS,                                KC_TRNS,                                KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS),
+     KC_TRNS,     KC_TRNS,    KC_TRNS,                                KC_SPC,                                KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS),
 };
 
 layer_state_t default_layer_state_set_user(layer_state_t state) {

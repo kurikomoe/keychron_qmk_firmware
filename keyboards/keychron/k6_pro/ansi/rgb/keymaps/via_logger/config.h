@@ -69,6 +69,11 @@
 #undef TAPPING_TERM
 #define TAPPING_TERM 150
 
+// 2. 忽略修饰键连击打断 (强烈推荐给 SpaceFn 使用)
+// 如果你按住空格，但在 TAPPING_TERM 时间内敲击了另一个键然后松开空格，
+// 开启此项会强制将其判定为 "按空格 + 按另一个键"，而不是判定为 Fn 组合键。
+#define IGNORE_MOD_TAP_INTERRUPT
+
 // 激进保持 (Permissive Hold)
 // 如果您开启了这个，当您按下 "Mod-Tap键" + "其他键" 时，
 // 即使您按住的时间没到 200ms，QMK 也会立刻判定为“按住”。
